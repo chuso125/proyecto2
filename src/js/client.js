@@ -13,7 +13,8 @@ import { visibilityFilter } from './reducers/visibility';
 import { Todo, getVisibleTodos, TodoList, AddTodo, TodoNotesList, AddTodoNote } from './presentational/todosVisual';
 import { Note, AddNote, NotesList } from './presentational/notesVisual';
 import { GeneralFooter, getVisibleElements, Search } from './presentational/filterVisual';
-import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import undoable from 'redux-undo';
+import { ActionCreators } from 'redux-undo';
 
 
 const { Component } = React;
@@ -27,21 +28,21 @@ const todoApp = combineReducers({
 const loadState = () => {
   try{
     let result = JSON.parse(localStorage.getItem('sate'));; 
-    return result ? result : undefined;
+    return result ? {past: [], present: result, future: []} : undefined;
   }catch(err){
     return undefined;
   }
 }
 const saveState = (state) => {
   try{
-    localStorage.setItem('sate', JSON.stringify(state));
+    localStorage.setItem('sate', JSON.stringify(state.present));
   }catch(err){
 
   }
 }
 
 
-const store = createStore(todoApp, loadState());
+const store = createStore(undoable(todoApp), loadState());
 
 const TodosApp = ({ todoNotes, visibilityFilter, notes }) => (
   <div>
@@ -78,42 +79,52 @@ const TodosApp = ({ todoNotes, visibilityFilter, notes }) => (
         </div>
     </div>
     <div class="clear"></div>
-    <AddTodoNote
-      onAddNote={
-        (title) => {
-          store.dispatch({
-            type: 'ADD_TODO_NOTE',
-            payload: {
-              id: v4(),
-              title: title,
-              visibilityFilter: 'SHOW_ALL',
-              color: '#FFFF00',
-              deleted: false,
-              createdAt: Date(),
-              modifiedAt: Date()
+    <div>
+      <div class="addNote">
+        <AddTodoNote
+          onAddNote={
+            (title) => {
+              store.dispatch({
+                type: 'ADD_TODO_NOTE',
+                payload: {
+                  id: v4(),
+                  title: title,
+                  visibilityFilter: 'SHOW_ALL',
+                  color: '#FFFF00',
+                  deleted: false,
+                  createdAt: Date(),
+                  modifiedAt: Date()
+                }
+              });
             }
-          });
-        }
-      }>Agregar Nota de todos</AddTodoNote>
-
-    <AddNote
-      onAddNote={
-        (title) => {
-          store.dispatch({
-            type: 'ADD_NOTE',
-            payload: {
-              id: v4(),
-              title: title,
-              color: '#FFFF00',
-              text: "",
-              deleted: false,
-              createdAt: Date(),
-              modifiedAt: Date()
+          }>Agregar Nota de todos</AddTodoNote>
+      </div>
+      <div class="addNote">
+        <AddNote
+          onAddNote={
+            (title) => {
+              store.dispatch({
+                type: 'ADD_NOTE',
+                payload: {
+                  id: v4(),
+                  title: title,
+                  color: '#FFFF00',
+                  text: "",
+                  deleted: false,
+                  createdAt: Date(),
+                  modifiedAt: Date()
+                }
+              });
             }
-          });
-        }
-      }>Agregar Nota</AddNote>
-
+          }>Agregar Nota</AddNote>
+        </div>
+        <button class="addNote" onClick={
+          () => {
+            store.dispatch(ActionCreators.undo());
+          }
+      }>undo</button>
+      </div>
+      <div class="clear"></div>
     <TodoNotesList 
       todoNotes={ getVisibleElements(todoNotes, visibilityFilter, 'TODO') }
       onAddTodo={
@@ -248,7 +259,7 @@ const TodosApp = ({ todoNotes, visibilityFilter, notes }) => (
 const render = () => {
   ReactDOM.render(
     <TodosApp
-      { ...store.getState() } />,
+      { ...store.getState().present } />,
     document.getElementById('root')
   );
     console.log(store.getState());
