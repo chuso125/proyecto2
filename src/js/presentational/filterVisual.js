@@ -19,7 +19,7 @@ const FilterLink = ({ visibilityFilter, currentVisibilityFilter, onFilterClicked
 }
 
 const Footer = ({ currentVisibilityFilter, onFilterClicked, noteId }) => (
-  <div>
+  <div class="todoFilter">
     Show:
     <FilterLink
       visibilityFilter="SHOW_ALL"
@@ -40,6 +40,7 @@ const Footer = ({ currentVisibilityFilter, onFilterClicked, noteId }) => (
       noteId={ noteId }>Active</FilterLink>
   </div>
 );
+
 const GeneralFooter = ({ currentVisibilityFilter, onFilterClicked }) => (
   <div>
     Show:

@@ -19,16 +19,18 @@ const AddNote = ({ onAddNote, children }) => {
 }
 
 const Note = ({ title }) => (
-  <li>
+  <div class="title">
     { title }
-  </li>
+  </div>
 );
 
 const NotesList = ({ notes, setColor, setText, setDeleted, setModifiedAt }) => (
-  <ul>
+  <span class="notes">
     {
       notes.map(note => (
         <div
+          class="note"
+          style={ {backgroundColor: note.color }}
           key={ note.id } >
             <Note
               title={ note.title } />
@@ -47,30 +49,34 @@ const NotesList = ({ notes, setColor, setText, setDeleted, setModifiedAt }) => (
         </div>
       ))
     }
-  </ul>
+    <div class="clear"></div>
+  </span>
 );
 
 const Delete = ({ setDeleted}) => (
-  <button onClick={ setDeleted }>X</button>
+  <div class="fa fa-close delete" onClick={ setDeleted }></div>
 );
 
 const TextEditor = ({ text, noteId, setText, setModifiedAt }) => {
   let input;
   return(
-  <input type="text" defaultValue={text} ref={ node => input = node } 
+  <textarea 
+  class="textEditor" 
+  defaultValue={text} 
+  ref={ node => input = node } 
     onChange={ 
       () => {
         setText(input.value, noteId );
         setModifiedAt(Date(), noteId); 
       } 
-    }/>
+    }></textarea>
   );
 }
 
 const ColorPicker = ({ color, noteId, setColor, setModifiedAt }) => {
   let input;
   return(
-  <input type="color" defaultValue={color} ref={ node => input = node } 
+  <input class="color" type="color" defaultValue={color} ref={ node => input = node } 
     onChange={ 
       () => {
         setColor(input.value, noteId );

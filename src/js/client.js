@@ -14,7 +14,7 @@ import { Todo, getVisibleTodos, TodoList, AddTodo, TodoNotesList, AddTodoNote } 
 import { Note, AddNote, NotesList } from './presentational/notesVisual';
 import { GeneralFooter, getVisibleElements, Search } from './presentational/filterVisual';
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
-import UndoRedo from './container/undo';
+
 
 const { Component } = React;
 
@@ -45,45 +45,39 @@ const store = createStore(todoApp, loadState());
 
 const TodosApp = ({ todoNotes, visibilityFilter, notes }) => (
   <div>
-    <UndoRedo
-    state={ store.getState() } 
-    undo={ () => {
-        store.dispatch(UndoActionCreators.undo())
-      }
-    }
-    redo={ () => {
-        store.dispatch(UndoActionCreators.redo())
-      }
-    }/>
-
-    <GeneralFooter
-      currentVisibilityFilter={ visibilityFilter }
-      onFilterClicked={
-        (filter) => {
-          store.dispatch({
-            type: 'SET_VISIBILITY_FILTER',
-            payload: { 
-              visibilityFilter: filter,
-              search: ''
+    <div>
+      <div class="generalFilter">
+        <GeneralFooter
+          currentVisibilityFilter={ visibilityFilter }
+          onFilterClicked={
+            (filter) => {
+              store.dispatch({
+                type: 'SET_VISIBILITY_FILTER',
+                payload: { 
+                  visibilityFilter: filter,
+                  search: ''
+                }
+              });
             }
-          });
-        }
-      } />
-
-    <Search
-      currentVisibilityFilter={ visibilityFilter }
-      setSearch={
-        (search) => {
-          store.dispatch({
-            type: 'SET_SEARCH',
-            payload: {
-              search: search,
-              visibilityFilter: visibilityFilter.visibilityFilter
+          } />
+      </div>
+      <div class="search">
+        <Search
+          currentVisibilityFilter={ visibilityFilter }
+          setSearch={
+            (search) => {
+              store.dispatch({
+                type: 'SET_SEARCH',
+                payload: {
+                  search: search,
+                  visibilityFilter: visibilityFilter.visibilityFilter
+                }
+              })
             }
-          })
-        }
-      } />
-
+          } />
+        </div>
+    </div>
+    <div class="clear"></div>
     <AddTodoNote
       onAddNote={
         (title) => {
@@ -101,6 +95,24 @@ const TodosApp = ({ todoNotes, visibilityFilter, notes }) => (
           });
         }
       }>Agregar Nota de todos</AddTodoNote>
+
+    <AddNote
+      onAddNote={
+        (title) => {
+          store.dispatch({
+            type: 'ADD_NOTE',
+            payload: {
+              id: v4(),
+              title: title,
+              color: '#FFFF00',
+              text: "",
+              deleted: false,
+              createdAt: Date(),
+              modifiedAt: Date()
+            }
+          });
+        }
+      }>Agregar Nota</AddNote>
 
     <TodoNotesList 
       todoNotes={ getVisibleElements(todoNotes, visibilityFilter, 'TODO') }
@@ -182,24 +194,6 @@ const TodosApp = ({ todoNotes, visibilityFilter, notes }) => (
           });
         }
       }/>
-
-    <AddNote
-      onAddNote={
-        (title) => {
-          store.dispatch({
-            type: 'ADD_NOTE',
-            payload: {
-              id: v4(),
-              title: title,
-              color: '#FFFF00',
-              text: "",
-              deleted: false,
-              createdAt: Date(),
-              modifiedAt: Date()
-            }
-          });
-        }
-      }>Agregar Nota</AddNote>
 
     <NotesList 
       notes={ getVisibleElements(notes,visibilityFilter, 'SHOW_NOTE') } 

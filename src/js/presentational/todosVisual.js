@@ -120,7 +120,7 @@ const Delete = ({ setDeleted, setModifiedAt, noteId}) => (
 );
 
 const TodoNotesList = ({ todoNotes, onAddTodo, onTodoClicked, onFilterClicked, onDelete, setColor, setDeleted, setModifiedAt }) => (
-	  <div class="todoNotes">
+	  <span class="notes">
 	    {
 	      todoNotes.map(todoNote => (
 	        <div
@@ -162,7 +162,7 @@ const TodoNotesList = ({ todoNotes, onAddTodo, onTodoClicked, onFilterClicked, o
 	      ))
 	    }
       <div class="clear"></div>
-	  </div>
+	  </span>
 	);
 
 export { Todo, getVisibleTodos, TodoList, AddTodo, TodoNotesList, AddTodoNote };
