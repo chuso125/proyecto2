@@ -1,0 +1,136 @@
+$colores: (red,lightgreen,yellow,lightblue,orange,purple,green,brown);
+$noteSize: 300px;
+@mixin box(){
+	height:300px;
+    margin-bottom: 10px;
+    @each $color in $colores{
+    	&.#{$color}{
+    		background-color: $color;
+    	}
+    }
+}
+.color{
+	
+}
+.todo{
+	width: $noteSize - 100px;
+	display: inline-block;
+	padding-left: 10px;
+}
+.note{
+	float: left;
+	width: $noteSize;
+	margin-right: 5px;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+	box-sizing: border-box;
+	position: relative
+}
+.title{
+	text-align: center;
+}
+.delete{
+	position: absolute;
+	top:0;
+	left: $noteSize - 20px;
+}
+.addTodo{
+	margin-left: $noteSize/5;
+}
+.box{
+	@include box();
+	&.gray {
+	    height: 75px;
+	  	position: relative;
+	  	padding-right: 150px;
+	  	background: lightblue;
+	  	& input[type="text"]{
+		  height: 100%;
+		  width: 100%;
+		  position: block;
+		  box-sizing: border-box;
+		  background: lightblue;
+		}
+		& input[type="button"] {
+		  background: grey;
+		  height: 100%;
+		  width: 150px;
+		  position: absolute;
+		  right: 0px;
+		  top: 0px;
+		}
+	}
+}
+.clear{
+	clear: both;
+}
+@media only screen and (min-width: 481px) {
+	.three-column-wrapper{
+		& .first-column-wrapper,.second-column-wrapper{
+			float: left;
+			width: 50%;
+			box-sizing: border-box;
+		}
+	}
+	.first-column-wrapper{
+		padding-right: 5px;
+	}
+	.second-column-wrapper{
+		padding-left: 5px;
+	}
+	.third-column-wrapper{
+		clear: both;
+	}
+}
+@media only screen and (min-width: 768px) {
+	.three-column-wrapper{
+		& .first-column-wrapper,.second-column-wrapper{
+			width: 33.33%;
+		}
+		& .second-column-wrapper{
+			padding-right: 5px;
+		}
+		& .third-column-wrapper{
+			float: left;
+			clear: none;
+			padding-left: 5px;
+			width: 33.34%;
+			box-sizing: border-box;
+		}
+	}
+	.brown{
+		clear: both;
+	}
+	.two-column-wrapper{
+		& .first-column-wrapper,.second-column-wrapper{
+			float: left;
+			width: 50%;
+			box-sizing: border-box;
+		}
+		& .first-column-wrapper{
+			padding-right: 5px;
+		}
+		& .second-column-wrapper{
+			padding-left: 5px;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
